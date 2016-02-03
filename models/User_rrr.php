@@ -1,28 +1,22 @@
 <?php
-
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
-
-/**
- * This is the model class for table "blg_user".
- *
- * @property integer $id
- * @property string $username
- * @property string $surname
- * @property string $name
- * @property string $password
- * @property string $salt
- * @property string $access_token
- * @property string $create_date
- *
- * @property BlgBlog[] $blgBlogs
- * @property BlgComment[] $blgComments
- */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
+
+
+    public $id;
+    public $username;
+    public $surname;
+    public $name;
+    public $salt;
+    public $password;
+    public $acces_token;
+
     /**
      * @inheritdoc
      */
@@ -31,55 +25,41 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return 'blg_user';
     }
 
+
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['username', 'surname', 'name', 'password'], 'required'],
-            [['create_date'], 'safe'],
-            [['username'], 'string', 'max' => 128],
-            [['surname', 'name'], 'string', 'max' => 45],
-            [['password', 'salt', 'access_token'], 'string', 'max' => 255],
-            [['username'], 'unique']
+            ['username','name'],
+            ['username','email'],
+            ['username','unique'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
+
+    public function attributeLabels(){
         return [
-            'id' => 'ID',
-            'username' => 'Username',
-            'surname' => 'Surname',
-            'name' => 'Name',
-            'password' => 'Password',
-            'salt' => 'Salt',
-            'access_token' => 'Acces Tokent',
-            'create_date' => 'Create Date',
+
+            'id' => _('ID'),
+            'name' => _('Имя'),
+            'surname' => _('Фамилия'),
+            'online' => _('Онлайн'),
+            'password' => _('Пароль'),
+            'salt' => _('Соль'),
+            'access_token' => _('Ключ авторизации'),
         ];
     }
 
 
-
-    /*------------- ------------------------------------------------ -------*/
-
-
-
-
-    /*
     public function beforeSave($insert){
-
-
 
         if(parent::beforeSave($insert)){
 
             if($this->getIsNewRecord() && !empty($this->password) )
             {
-
                 $this->salt = $this->saltGenerator();
             }
             if(!empty($this->password))
@@ -98,33 +78,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
     }//beforeSave
-    */
-
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-
-            if($this->getIsNewRecord() && !empty($this->password))
-            {
-                $this->salt = $this->saltGenerator();
-            }
-            if(!empty($this->password))
-            {
-                $this->password = $this->passWithSalt($this->password,$this->salt);
-            }else
-            {
-                unset($this->password);
-            }
-
-
-            return true;
-        }
-        return false;
-    }//beforeSave
-
-
-
 
 
 
@@ -181,8 +134,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getId()
     {
-        $pKey = $this->getPrimaryKey();
-        return $pKey;
+        return $this->getPrimaryKey()["id"];
     }
 
     /**
@@ -199,7 +151,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->access_token;
+        return $this->acces_token;
     }
 
     /**
@@ -222,8 +174,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-
-        return $this->password === $this->passWithSalt($password,$this->salt);
+        return $this->password === $this->passWithSalt($password,$this->saltGenerator());
     }
 
 
@@ -243,7 +194,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function generateAuthKey()
     {
-        $this->access_token = Yii::$app->security->generateRandomString();
+        $this->acces_token = Yii::$app->security->generateRandomString();
     }
+
+
+
 
 }

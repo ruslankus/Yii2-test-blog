@@ -33,7 +33,7 @@ class m160131_232829_create_table_user extends Migration
               `name` VARCHAR(45) NOT NULL,
               `password` VARCHAR(255) NOT NULL,
               `salt` VARCHAR(255) NOT NULL,
-              `acces_tokent` VARCHAR(255) NULL,
+              `access_token` VARCHAR(255) NULL,
               `create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (`id`),
               UNIQUE INDEX `username_UNIQUE` (`username` ASC))

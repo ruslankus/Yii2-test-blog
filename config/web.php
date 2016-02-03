@@ -1,6 +1,8 @@
 <?php
+require_once(__DIR__.'/functions.php');
 
 $params = require(__DIR__ . '/params.php');
+
 
 $config = [
     'id' => 'basic',
@@ -14,6 +16,22 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+
+
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Disable index.php
+            'showScriptName' => false,
+            // Disable r= routes
+            'enablePrettyUrl' => true,
+            'rules' => array(
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            ),
+        ],
+
+
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
