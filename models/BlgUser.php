@@ -39,7 +39,7 @@ class BlgUser extends \yii\db\ActiveRecord
             [['create_date'], 'safe'],
             [['username'], 'string', 'max' => 128],
             [['surname', 'name'], 'string', 'max' => 45],
-            [['password', 'salt', 'acces_tokent'], 'string', 'max' => 255],
+            [['password', 'salt', 'access_token'], 'string', 'max' => 255],
             [['username'], 'unique']
         ];
     }
@@ -56,7 +56,7 @@ class BlgUser extends \yii\db\ActiveRecord
             'name' => 'Name',
             'password' => 'Password',
             'salt' => 'Salt',
-            'acces_tokent' => 'Acces Tokent',
+            'access_token' => 'Access Token',
             'create_date' => 'Create Date',
         ];
     }

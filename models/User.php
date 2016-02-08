@@ -23,6 +23,13 @@ use yii\web\IdentityInterface;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+
+
+    /**
+    * Validate
+    */
+    const MIN_PASS_LENGTH = 6;
+
     /**
      * @inheritdoc
      */
@@ -38,6 +45,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'surname', 'name', 'password'], 'required'],
+            ['password','string','min' => self::MIN_PASS_LENGTH ],
             [['create_date'], 'safe'],
             [['username'], 'string', 'max' => 128],
             [['surname', 'name'], 'string', 'max' => 45],
@@ -68,37 +76,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /*------------- ------------------------------------------------ -------*/
 
 
-
-
-    /*
-    public function beforeSave($insert){
-
-
-
-        if(parent::beforeSave($insert)){
-
-            if($this->getIsNewRecord() && !empty($this->password) )
-            {
-
-                $this->salt = $this->saltGenerator();
-            }
-            if(!empty($this->password))
-            {
-                $this->password = $this->passWithSalt($this->password,$this->salt);
-            }
-            else
-            {
-                unset($this->password);
-            }
-
-        }
-        else
-        {
-            return false;
-        }
-
-    }//beforeSave
-    */
 
 
     public function beforeSave($insert)
